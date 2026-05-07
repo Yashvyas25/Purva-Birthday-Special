@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Countdown & Memories</title>
+    <style>
+        :root {
+            --pink-light: #ffcad4;
+            --pink-dark: #f7aef8;
+            --accent: #ff4d6d;
+            --text-color: #4a4a4a;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--pink-light), var(--pink-dark));
+            font-family: 'Segoe UI', sans-serif;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            z-index: 10;
+        }
+
+        /* Countdown Section */
+        .countdown-box {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+
+        #timer {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--accent);
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .time-unit { font-size: 0.8rem; color: #888; text-transform: uppercase; display: block; }
+
+        /* Gallery Section */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .polaroid {
+            background: white;
+            padding: 15px 15px 40px 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            transform: rotate(var(--rotation));
+            transition: transform 0.3s ease;
+        }
+
+        .polaroid:hover {
+            transform: rotate(0deg) scale(1.05);
+            z-index: 20;
+        }
+
+        .polaroid img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #eee;
+        }
+
+        .caption {
+            margin-top: 15px;
+            font-family: 'Brush Script MT', cursive;
+            font-size: 1.2rem;
+        }
+
+        .heart {
+            position: fixed;
+            pointer-events: none;
+            animation: float 4s linear forwards;
+            z-index: 1;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(0); opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="countdown-box">
+            <h1 id="headline">Countdown to May 9th!</h1>
+            <div id="timer">Loading...</div>
+        </div>
+
+        <h2 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">Our Favorite Moments</h2>
+        <div class="gallery">
+            <!-- Replace the 'src' URLs with your own photo links! -->
+            <div class="polaroid" style="--rotation: -3deg;">
+                <img src="https://via.placeholder.com/200x200?text=Your+Photo+1" alt="Memory 1">
+                <div class="caption">The first date ❤️</div>
+            </div>
+            <div class="polaroid" style="--rotation: 2deg;">
+                <img src="https://via.placeholder.com/200x200?text=Your+Photo+2" alt="Memory 2">
+                <div class="caption">Beach day! 🏖️</div>
+            </div>
+            <div class="polaroid" style="--rotation: -2deg;">
+                <img src="https://via.placeholder.com/200x200?text=Your+Photo+3" alt="Memory 3">
+                <div class="caption">That one dinner... ✨</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set the date we're counting down to
+        const birthdayDate = new Date("May 9, 2026 00:00:00").getTime();
+
+        const x = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = birthdayDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("timer").innerHTML = `
+                <div>${days}<span class="time-unit">Days</span></div>
+                <div>${hours}<span class="time-unit">Hrs</span></div>
+                <div>${minutes}<span class="time-unit">Min</span></div>
+                <div>${seconds}<span class="time-unit">Sec</span></div>
+            `;
+
+            if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("headline").innerHTML = "🎉 Happy Birthday! 🎉";
+                document.getElementById("timer").innerHTML = "It's your special day!";
+                setInterval(createHeart, 300); // Continuous hearts on birthday
+            }
+        }, 1000);
+
+        function createHeart() {
+            const heart = document.createElement("div");
+            heart.className = "heart";
+            heart.innerHTML = "❤️";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.fontSize = (Math.random() * 20 + 10) + "px";
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 4000);
+        }
+    </script>
+</body>
+</html>
