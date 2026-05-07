@@ -3,163 +3,250 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Birthday Countdown & Memories</title>
+    <title>For You | 09.05</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --pink-light: #ffcad4;
-            --pink-dark: #f7aef8;
-            --accent: #ff4d6d;
-            --text-color: #4a4a4a;
+            --primary: #ff85a1;
+            --secondary: #fbb1bd;
+            --bg: #fff5f6;
+            --glass: rgba(255, 255, 255, 0.7);
         }
 
         body {
             margin: 0;
-            padding: 20px;
-            background: linear-gradient(135deg, var(--pink-light), var(--pink-dark));
-            font-family: 'Segoe UI', sans-serif;
-            color: var(--text-color);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            padding: 0;
+            background: var(--bg);
+            font-family: 'Poppins', sans-serif;
+            color: #444;
+            overflow-x: hidden;
+        }
+
+        /* Animated Bubble Background */
+        .background {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: linear-gradient(180deg, #fff5f6 0%, #ffcad4 100%);
+        }
+
+        .bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            bottom: -100px;
+            animation: rise 15s infinite ease-in;
+        }
+
+        @keyframes rise {
+            0% { transform: translateY(0) scale(1); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-110vh) scale(1.5); opacity: 0; }
         }
 
         .container {
-            max-width: 800px;
-            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
             text-align: center;
-            z-index: 10;
         }
 
-        /* Countdown Section */
-        .countdown-box {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            margin-bottom: 40px;
+        /* Glassmorphism Card */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 15px 35px rgba(255, 133, 161, 0.1);
+            margin-bottom: 50px;
         }
 
-        #timer {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--accent);
-            display: flex;
-            justify-content: center;
-            gap: 15px;
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            color: var(--primary);
+            margin: 0;
         }
 
-        .time-unit { font-size: 0.8rem; color: #888; text-transform: uppercase; display: block; }
-
-        /* Gallery Section */
-        .gallery {
+        .timer-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 30px 0;
+        }
+
+        .timer-unit {
+            background: white;
+            padding: 15px 5px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .timer-unit span {
+            display: block;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .timer-unit label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #999;
+        }
+
+        /* Modern Photo Grid */
+        .photo-stack {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 50px;
+        }
+
+        .photo-item {
+            width: 250px;
+            background: white;
+            padding: 12px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .photo-item:hover {
+            transform: translateY(-10px) rotate(2deg);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .photo-item p {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.4rem;
+            margin: 15px 0 5px 0;
+            color: #555;
+        }
+
+        /* Cute Message Button */
+        .reveal-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(255, 133, 161, 0.3);
+            transition: 0.3s;
             margin-top: 20px;
         }
 
-        .polaroid {
-            background: white;
-            padding: 15px 15px 40px 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-            transform: rotate(var(--rotation));
-            transition: transform 0.3s ease;
+        .reveal-btn:hover {
+            background: #ff4d6d;
+            transform: scale(1.05);
         }
 
-        .polaroid:hover {
-            transform: rotate(0deg) scale(1.05);
-            z-index: 20;
+        #love-note {
+            display: none;
+            font-style: italic;
+            margin-top: 30px;
+            line-height: 1.8;
+            color: #666;
+            animation: fadeIn 1.5s;
         }
 
-        .polaroid img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            background: #eee;
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .caption {
-            margin-top: 15px;
-            font-family: 'Brush Script MT', cursive;
-            font-size: 1.2rem;
-        }
-
-        .heart {
-            position: fixed;
-            pointer-events: none;
-            animation: float 4s linear forwards;
-            z-index: 1;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(100vh) scale(0); opacity: 1; }
-            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
-        }
     </style>
 </head>
 <body>
 
+    <div class="background" id="bg"></div>
+
     <div class="container">
-        <div class="countdown-box">
-            <h1 id="headline">Countdown to May 9th!</h1>
-            <div id="timer">Loading...</div>
+        <div class="glass-card">
+            <h1 id="header">Counting down to your day...</h1>
+            
+            <div class="timer-grid" id="timer">
+                <div class="timer-unit"><span id="days">00</span><label>Days</label></div>
+                <div class="timer-unit"><span id="hours">00</span><label>Hours</label></div>
+                <div class="timer-unit"><span id="mins">00</span><label>Mins</label></div>
+                <div class="timer-unit"><span id="secs">00</span><label>Secs</label></div>
+            </div>
+
+            <button class="reveal-btn" onclick="showNote()">Open My Letter</button>
+            <div id="love-note">
+                "To the most incredible person I know. Every moment with you is a gift, and I'm so lucky to celebrate another year of your beautiful life. Happy Birthday!"
+            </div>
         </div>
 
-        <h2 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">Our Favorite Moments</h2>
-        <div class="gallery">
-            <!-- Replace the 'src' URLs with your own photo links! -->
-            <div class="polaroid" style="--rotation: -3deg;">
-                <img src="https://via.placeholder.com/200x200?text=Your+Photo+1" alt="Memory 1">
-                <div class="caption">The first date ❤️</div>
+        <div class="photo-stack">
+            <div class="photo-item">
+                <img src="https://via.placeholder.com/300x300" alt="Memory">
+                <p>My favorite smile</p>
             </div>
-            <div class="polaroid" style="--rotation: 2deg;">
-                <img src="https://via.placeholder.com/200x200?text=Your+Photo+2" alt="Memory 2">
-                <div class="caption">Beach day! 🏖️</div>
+            <div class="photo-item">
+                <img src="https://via.placeholder.com/300x300" alt="Memory">
+                <p>Us being silly</p>
             </div>
-            <div class="polaroid" style="--rotation: -2deg;">
-                <img src="https://via.placeholder.com/200x200?text=Your+Photo+3" alt="Memory 3">
-                <div class="caption">That one dinner... ✨</div>
+            <div class="photo-item">
+                <img src="https://via.placeholder.com/300x300" alt="Memory">
+                <p>The best day</p>
             </div>
         </div>
     </div>
 
     <script>
-        // Set the date we're counting down to
-        const birthdayDate = new Date("May 9, 2026 00:00:00").getTime();
+        // Set Birthday Date
+        const targetDate = new Date("May 9, 2026 00:00:00").getTime();
 
-        const x = setInterval(function() {
+        const updateTimer = () => {
             const now = new Date().getTime();
-            const distance = birthdayDate - now;
+            const diff = targetDate - now;
 
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById("timer").innerHTML = `
-                <div>${days}<span class="time-unit">Days</span></div>
-                <div>${hours}<span class="time-unit">Hrs</span></div>
-                <div>${minutes}<span class="time-unit">Min</span></div>
-                <div>${seconds}<span class="time-unit">Sec</span></div>
-            `;
-
-            if (distance < 0) {
-                clearInterval(x);
-                document.getElementById("headline").innerHTML = "🎉 Happy Birthday! 🎉";
-                document.getElementById("timer").innerHTML = "It's your special day!";
-                setInterval(createHeart, 300); // Continuous hearts on birthday
+            if (diff <= 0) {
+                document.getElementById("header").innerHTML = "Happy Birthday, Beautiful! 🎉";
+                document.getElementById("timer").style.display = "none";
+                return;
             }
-        }, 1000);
 
-        function createHeart() {
-            const heart = document.createElement("div");
-            heart.className = "heart";
-            heart.innerHTML = "❤️";
-            heart.style.left = Math.random() * 100 + "vw";
-            heart.style.fontSize = (Math.random() * 20 + 10) + "px";
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 4000);
+            document.getElementById("days").innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+            document.getElementById("hours").innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById("mins").innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById("secs").innerText = Math.floor((diff % (1000 * 60)) / 1000);
+        };
+
+        setInterval(updateTimer, 1000);
+
+        function showNote() {
+            const note = document.getElementById("love-note");
+            note.style.display = "block";
         }
+
+        // Create Background Bubbles
+        function createBubbles() {
+            const bg = document.getElementById('bg');
+            for(let i=0; i<15; i++) {
+                const b = document.createElement('div');
+                b.className = 'bubble';
+                const size = Math.random() * 60 + 20 + 'px';
+                b.style.width = size;
+                b.style.height = size;
+                b.style.left = Math.random() * 100 + 'vw';
+                b.style.animationDuration = Math.random() * 8 + 7 + 's';
+                b.style.animationDelay = Math.random() * 5 + 's';
+                bg.appendChild(b);
+            }
+        }
+        createBubbles();
     </script>
 </body>
 </html>
