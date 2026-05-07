@@ -8,8 +8,8 @@
     <style>
         :root {
             --primary: #ff85a1;
-            --secondary: #fbb1bd;
             --bg: #fff5f6;
+            --glass: rgba(255, 255, 255, 0.85);
         }
 
         body {
@@ -18,165 +18,179 @@
             font-family: 'Poppins', sans-serif;
             color: #444;
             overflow-x: hidden;
-            text-align: center;
         }
 
-        .background-hearts {
+        .background-bubbles {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
-            opacity: 0.5;
+            background: linear-gradient(180deg, #fff5f6 0%, #ffcad4 100%);
         }
 
         .container {
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
             padding: 40px 20px;
+            text-align: center;
         }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.8);
+            background: var(--glass);
             backdrop-filter: blur(10px);
             border-radius: 30px;
             padding: 30px;
             box-shadow: 0 15px 35px rgba(255, 133, 161, 0.15);
+            margin-bottom: 30px;
         }
 
-        h1 { font-family: 'Dancing Script', cursive; color: var(--primary); font-size: 2.5rem; }
+        h1 { font-family: 'Dancing Script', cursive; color: var(--primary); font-size: 2.8rem; margin: 10px 0; }
 
-        /* The Quest Area */
-        .quest-box {
-            margin: 30px 0;
-            padding: 20px;
-            border: 2px dashed var(--primary);
-            border-radius: 20px;
-            background: #fff;
+        .quest-instruction { font-size: 1rem; color: #777; margin-bottom: 20px; }
+
+        /* Treasure Icons */
+        .treasure-grid {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
         }
 
-        .clue-count {
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 10px;
-        }
-
-        /* Floating Treasure Icons */
         .treasure {
-            display: inline-block;
             font-size: 2.5rem;
             cursor: pointer;
-            margin: 15px;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.3s;
             filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1));
         }
 
-        .treasure:hover { transform: scale(1.3) rotate(10deg); }
-        .treasure.found { filter: grayscale(1); opacity: 0.5; pointer-events: none; }
+        .treasure:hover { transform: scale(1.2); }
+        .treasure.found { filter: grayscale(1); opacity: 0.3; pointer-events: none; }
 
-        /* Pop-up Message */
-        #message-box {
-            height: 60px;
-            margin-top: 20px;
-            font-style: italic;
-            color: #ff4d6d;
-            font-weight: 600;
+        /* Photo Prizes */
+        .photo-prize {
+            display: none;
+            background: white;
+            padding: 15px 15px 35px 15px;
+            border-radius: 5px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 250px;
+            margin: 20px auto;
+            transform: rotate(-2deg);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* Countdown */
+        @keyframes popIn {
+            0% { transform: scale(0) rotate(-10deg); opacity: 0; }
+            100% { transform: scale(1) rotate(-2deg); opacity: 1; }
+        }
+
+        .photo-prize img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 3px;
+        }
+
+        .photo-caption {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.4rem;
+            margin-top: 15px;
+            color: #555;
+        }
+
         .countdown {
-            font-size: 1.2rem;
-            margin-top: 20px;
-            letter-spacing: 2px;
-            color: #888;
+            margin-top: 30px;
+            font-weight: 600;
+            color: var(--primary);
+            letter-spacing: 1px;
         }
 
-        .hidden { display: none; }
-
-        /* Confetti Effect */
         .confetti {
             position: fixed;
-            width: 10px; height: 10px;
-            background-color: var(--primary);
+            width: 8px; height: 8px;
             top: -10px;
             animation: fall 3s linear forwards;
+            z-index: 100;
         }
 
-        @keyframes fall {
-            to { transform: translateY(105vh) rotate(360deg); }
-        }
+        @keyframes fall { to { transform: translateY(105vh) rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div class="background-hearts" id="bg"></div>
+    <div class="background-bubbles"></div>
 
     <div class="container">
         <div class="glass-card">
-            <h1 id="main-title">The Birthday Loading...</h1>
-            <p>I couldn't wait until midnight to show you this. Can you find all 5 hidden surprises while we wait?</p>
+            <h1>The Birthday Loading...</h1>
+            <p class="quest-instruction">Find the 4 hidden memories to unlock the countdown!</p>
 
-            <div class="quest-box">
-                <div class="clue-count">Found: <span id="count">0</span> / 5</div>
-                
-                <div class="treasure" onclick="reveal(this, 'You make my heart skip a beat! 💓')">🎁</div>
-                <div class="treasure" onclick="reveal(this, 'I hope your birthday is as sweet as you are! 🍭')">✨</div>
-                <div class="treasure" onclick="reveal(this, 'You are my favorite person in the whole world. 🌍')">⭐</div>
-                <div class="treasure" onclick="reveal(this, 'Hint: Your first gift is something you once mentioned... 🤫')">🗝️</div>
-                <div class="treasure" onclick="reveal(this, 'Just a few more hours until the big reveal! ⏳')">🎈</div>
-
-                <div id="message-box">Click an icon to unlock a secret!</div>
+            <div class="treasure-grid">
+                <div class="treasure" onclick="reveal(1, 'Our first adventure!')">✨</div>
+                <div class="treasure" onclick="reveal(2, 'The best smile ever.')">🎁</div>
+                <div class="treasure" onclick="reveal(3, 'Silly moments together.')">🍭</div>
+                <div class="treasure" onclick="reveal(4, 'One year older, more beautiful.')">🎈</div>
             </div>
 
-            <div class="countdown" id="timer">00:00:00:00 until May 9th</div>
-            
-            <div id="final-hint" class="hidden">
-                <p style="color: var(--primary); font-weight: bold;">🎉 All secrets found! Check back at midnight for the full gallery. 🎉</p>
+            <div id="prize-1" class="photo-prize">
+                <img src="IMG_9268.jpg" alt="Memory 1">
+                <div class="photo-caption">Our first adventure! ❤️</div>
             </div>
+            <div id="prize-2" class="photo-prize">
+                <img src="IMG_9631.jpg" alt="Memory 2">
+                <div class="photo-caption">That perfect smile... ✨</div>
+            </div>
+            <div id="prize-3" class="photo-prize">
+                <img src="f4e7d54b-fc48-4105-b5d4-bab697c8a54b.JPG" alt="Memory 3">
+                <div class="photo-caption">Always being silly! 🤪</div>
+            </div>
+            <div id="prize-4" class="photo-prize">
+                <img src="IMG_6771.jpg" alt="Memory 4">
+                <div class="photo-caption">The best is yet to come. 💍</div>
+            </div>
+
+            <div class="countdown" id="timer">Loading time...</div>
         </div>
     </div>
 
     <script>
-        let foundCount = 0;
-        const total = 5;
-
-        function reveal(element, msg) {
-            if (!element.classList.contains('found')) {
-                element.classList.add('found');
-                foundCount++;
-                document.getElementById('count').innerText = foundCount;
-                document.getElementById('message-box').innerText = msg;
-                createConfetti();
-
-                if (foundCount === total) {
-                    document.getElementById('final-hint').classList.remove('hidden');
-                }
-            }
+        function reveal(id, msg) {
+            // Hide all current prizes
+            document.querySelectorAll('.photo-prize').forEach(p => p.style.display = 'none');
+            
+            // Show the specific prize
+            const prize = document.getElementById('prize-' + id);
+            prize.style.display = 'block';
+            
+            // Mark emoji as found
+            event.target.classList.add('found');
+            
+            createConfetti();
         }
 
         function createConfetti() {
-            for(let i=0; i<10; i++) {
+            for(let i=0; i<15; i++) {
                 const c = document.createElement('div');
                 c.className = 'confetti';
                 c.style.left = Math.random() * 100 + 'vw';
-                c.style.backgroundColor = ['#ff85a1', '#fbb1bd', '#ffacc5'][Math.floor(Math.random()*3)];
+                c.style.backgroundColor = ['#ff85a1', '#ffacc5', '#ffffff'][Math.floor(Math.random()*3)];
                 document.body.appendChild(c);
                 setTimeout(() => c.remove(), 3000);
             }
         }
 
-        // Timer Logic
-        const targetDate = new Date("May 9, 2026 00:00:00").getTime();
+        // Countdown logic for May 9th
+        const target = new Date("May 9, 2026 00:00:00").getTime();
         setInterval(() => {
             const now = new Date().getTime();
-            const diff = targetDate - now;
+            const diff = target - now;
             if (diff <= 0) {
-                document.getElementById('timer').innerText = "IT'S TIME! 🎂";
-                // You could auto-redirect her to a "Final" page here if you wanted!
+                document.getElementById('timer').innerHTML = "HAPPY BIRTHDAY!!! 🎉🎂";
                 return;
             }
             const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const s = Math.floor((diff % (1000 * 60)) / 1000);
-            document.getElementById('timer').innerText = `${h}h ${m}m ${s}s remaining...`;
+            document.getElementById('timer').innerText = `Full surprise unlocks in ${h}h ${m}m ${s}s`;
         }, 1000);
     </script>
 </body>
